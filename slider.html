@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="slider.js"></script>
+<style>
+.wrapper { overflow: hidden; }
+span { padding: 0 2em }
+</style>
+</head>
+<body>
+<div class="wrapper">
+<div id="scroll"><span>zero</span><span>one</span><span>two</span><span>three</span><span>four</span><span>five</span><span>six</span><span>seven</span><span>eight</span><span>nine</span><span>ten</span><span>eleven</span><span>twelve</span><span>thirteen</span><span>fourteen</span><span>fifteen</span><span>sixteen</span><span>seventeen</span><span>eighteen</span><span>nineteen</span><span>twenty</span></div>
+</div>
+<div class="wrapper">
+<div id="css3"><span>zero</span><span>one</span><span>two</span><span>three</span><span>four</span><span>five</span><span>six</span><span>seven</span><span>eight</span><span>nine</span><span>ten</span><span>eleven</span><span>twelve</span><span>thirteen</span><span>fourteen</span><span>fifteen</span><span>sixteen</span><span>seventeen</span><span>eighteen</span><span>nineteen</span><span>twenty</span></div>
+</div>
+<script>
+var scroll=new scrollSlider();
+scroll.init('scroll');
+var css3=new css3Slider();
+css3.init('css3');
+</script>
+</body>
+<html>
