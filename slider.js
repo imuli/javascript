@@ -44,6 +44,8 @@ css3Slider.prototype.init = function(id){
 	if(!this.elem) return false;
 	if(!this.supported()) return false;
 
+	this.elem.style['whiteSpace'] = 'nowrap';
+
 	var me = this;
 	var tEvents = {
 		'transition':		'transitionend',
@@ -127,11 +129,14 @@ scrollSlider.prototype.init = function(id){
 	if(!this.elem) return false;
 
 	this.elem.style['overflow'] = 'hidden';
+	this.elem.style['whiteSpace'] = 'nowrap';
 
 	var me = this;
 	this.elem.addEventListener('mouseover',
 			function(){ me.pause(); }, true);
 	this.elem.addEventListener('mouseleave',
+			function(){ me.resume(); }, true);
+	window.addEventListener('resize',
 			function(){ me.resume(); }, true);
 	this.calc();
 	this.resume();
@@ -141,7 +146,6 @@ scrollSlider.prototype.shift = function()
 {
 	this.elem.scrollLeft+=1;
 	if(this.elem.scrollLeft >= this.distance){
-		console.log(this);
 		this.elem.scrollLeft -= this.distance;
 		this.rotate();
 		this.calc();
@@ -152,6 +156,7 @@ scrollSlider.prototype.resume = function(){
 	var me = this;
 	if(this.timer !== undefined)
 		window.clearInterval(this.timer);
+	if(this.elem.scrollWidth <= this.elem.offsetWidth) return;
 	this.timer = window.setInterval(
 		function(){ me.shift(); }, 1000/this.speed);
 };
