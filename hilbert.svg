@@ -1,0 +1,160 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+	<g id="freq" stroke="black" stroke-width="1.00" fill="none">
+	</g>
+	<style type="text/css">
+.technician {stroke: #080;}
+.general {stroke: #088;}
+.extra {stroke: #008;}
+.fir {stroke: #400;}
+.lir {stroke: #500;}
+.mir {stroke: #600;}
+.sir {stroke: #700;}
+.nir {stroke: #800;}
+.red {stroke: #f00;}
+.orange {stroke: #f80;}
+.yellow {stroke: #ff0;}
+.green {stroke: #0f0;}
+.blue {stroke: #00f;}
+.violet {stroke: #b4f;}
+.uva {stroke: #528;}
+.uvb {stroke: #426;}
+.uvc {stroke: #314;}
+.euv {stroke: #213;}
+	</style>
+	<script type="application/javascript">
+function hilbert_rewrite(input){
+	var output='';
+	for(var i = 0;i != input.length; i++){
+		switch(input[i]){
+		case 'a':
+			output+= '-bf+afa+fb-';
+			break;
+		case 'b':
+			output+= '+af-bfb-fa+';
+			break;
+		default:
+			output+= input[i];
+		}
+	}
+	return output;
+}
+function hilbert_path(input){
+	var output='m0.5,0.5';
+	var dir = {x: 1, y: 0};
+	for(var i = 0;i != input.length; i++){
+		switch(input[i]){
+		case '-':
+			dir = {x: -dir.y, y: dir.x};
+			break;
+		case '+':
+			dir = {x: dir.y, y: -dir.x};
+			break;
+		case 'f':
+			output+= 'l'+dir.x.toString()+','+dir.y.toString();
+			break;
+		default:
+		}
+	}
+	return output;
+}
+var g = document.getElementById("freq");
+var m = window.innerHeight;
+var d = 7;
+var path = "a";
+for(var i=d;i;i--){
+	path=hilbert_rewrite(path);
+}
+path = hilbert_path(path);
+g.setAttribute("transform", "scale("+(m/(1&lt;&lt;d)).toString()+")");
+
+var eV = 300000000/1.24;
+var allocs = {
+	background: [ { range: [ 0, 0] } ],
+	technician: [
+		{ range: [50, 54] },
+		{ range: [144, 148] },
+		{ range: [219, 220] },
+		{ range: [420, 450] },
+		{ range: [902, 928] },
+		{ range: [1240, 1300] },
+		{ range: [2300, 2310] },
+		{ range: [2390, 2450] },
+		{ range: [3300, 3500] },
+		{ range: [5650, 5925] },
+		{ range: [10000, 10500] },
+		{ range: [24000, 24250] },
+		{ range: [47000, 47200] },
+		{ range: [75500, 81000] },
+		{ range: [119980, 120020] },
+		{ range: [142000, 149000] },
+		{ range: [241000, 250000] },
+		{ range: [300000, 3000000] }
+	],
+	general: [
+		{ range: [1.8, 2] },
+		{ range: [3.525, 3.75] },
+		{ range: [3.85, 4.00] },
+		{ range: [7.025, 7.150] },
+		{ range: [7.225, 7.300] },
+		{ range: [10.10, 10.15] },
+		{ range: [14.025, 14.150] },
+		{ range: [14.225, 14.350] },
+		{ range: [18.068, 18.168] },
+		{ range: [21.025, 21.200] },
+		{ range: [21.30, 21.45] },
+		{ range: [24.89, 24.99] },
+		{ range: [28.0, 29.7] }
+	],
+	extra: [
+		{ range: [3.500, 3.525]},
+		{ range: [3.75, 3.85]},
+		{ range: [7.150, 7.225]},
+		{ range: [14.000, 14.025]},
+		{ range: [14.150, 14.225]},
+		{ range: [21.000, 21.025]},
+		{ range: [21.20, 21.30]}
+	],
+	fir: [ { range: [3000000, 20000000]} ],
+	lir: [ { range: [20000000, 37000000]} ],
+	mir: [ { range: [37000000, 100000000]} ],
+	sir: [ { range: [100000000, 214000000]} ],
+	nir: [ { range: [214000000, 400000000]} ],
+	red: [ { range: [400000000, 484000000]} ],
+	orange: [ { range: [484000000, 508000000]} ],
+	yellow: [ { range: [508000000, 526000000]} ],
+	green: [ { range: [526000000, 606000000]} ],
+	blue: [ { range: [606000000, 668000000]} ],
+	violet: [ { range: [668000000, 789000000]} ],
+	uva: [ { range: [789000000, 3.94*eV]} ],
+	uvb: [ { range: [3.94*eV, 4.43*eV]} ],
+	uvc: [ { range: [4.43*eV, 12.4*eV]} ],
+	euv: [ { range: [12.4*eV, 124*eV]} ]
+};
+function mapperms(alloc, name){
+	var lastend=0;
+	var dashpattern="0";
+	var m = 1&lt;&lt;(d*2);
+	var e = document.createElementNS("http://www.w3.org/2000/svg", "path");
+	for(var i=0; i != alloc.length; i++){
+		var a = alloc[i].range;
+		var start = Math.log(a[0]/3)/Math.log(10)+5;
+		var end = Math.log(a[1]/3)/Math.log(10)+5;
+		var startdiff = m*(start - lastend)/16;
+		var enddiff = m*(end - start)/16;
+		lastend = end;
+		dashpattern += " " + startdiff.toString() + " " + enddiff;
+	}
+	dashpattern+=" " + (m-lastend).toString();
+	e.setAttribute("stroke-dasharray", dashpattern);
+	e.setAttribute("class", name);
+	e.setAttribute("d", path);
+	return(e);
+}
+for(var a in allocs){
+	console.log(a);
+	g.appendChild(mapperms(allocs[a], a));
+}
+	</script>
+</svg>
