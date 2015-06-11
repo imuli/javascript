@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Hilbert Color Picker</title>
+		<script type="text/javascript" src="hilbertcolor.js"></script>
+	</head>
+	<body>
+		<div id="here">
+		</div>
+		<script>
+document.getElementById('here').appendChild(hilbertColor(function(color){
+	document.body.style['background-color'] = color;
+}));
+		</script>
+	</body>
+</html>
